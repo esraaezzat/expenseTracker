@@ -1,24 +1,39 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
 import { GlobalStyles } from "../../constants/Styles";
+import { getFormattedDate } from "../../util/date";
+import { useNavigation } from '@react-navigation/native';
+import Screens from "../../constants/Screens";
 
 
-const ExpenseItem = ({ description, amount, date }) => {
-    return <Pressable>
-        <View style={styles.expenseItem}>
-            <View>
-                <Text style={[styles.textBase, styles.description]}>{description}</Text>
-                <Text style={styles.textBase}>{date.toString()}</Text>
+const ExpenseItem = ({id, description, amount, date }) => {
+    const navigation = useNavigation();
+    const expensePressHandler = () => {
+        navigation.navigate(Screens.MANAGE_EXPENSE, {
+            expenseId: id
+        })
+    }
+
+    return (
+        <Pressable onPress={expensePressHandler} style={({ pressed }) => pressed && styles.pressed} >
+            <View style={styles.expenseItem}>
+                <View>
+                    <Text style={[styles.textBase, styles.description]}>{description}</Text>
+                    <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+                </View>
+                <View style={styles.amoutContainer}>
+                    <Text style={styles.amount}>{amount.toFixed(2)}</Text>
+                </View>
             </View>
-            <View style={styles.amoutContainer}>
-                <Text style={styles.amount}>{amount}</Text>
-            </View>
-        </View>
-    </Pressable>
+        </Pressable>
+    )
 }
 
 export default ExpenseItem;
 
 const styles = StyleSheet.create({
+    pressed: {
+        opacity: 0.75
+    },
     expenseItem: {
         padding: 12,
         marginVertical: 8,
@@ -46,7 +61,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 4
+        borderRadius: 4,
+        minWidth: 80
     },
     amount: {
         color: GlobalStyles.colors.primary500,
