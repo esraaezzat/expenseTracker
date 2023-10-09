@@ -6,7 +6,6 @@ import { getDayMinusDays } from "../util/date";
 
 const RecentExpenses = () => {
     const expensesCtx = useContext(ExpenseContext);
-    console.log(expensesCtx)
     const recentExpenses = expensesCtx.expenses.filter( (expense) =>{
         const today = new Date();
         const date7DaysAgo = getDayMinusDays(today, 7);
